@@ -27,7 +27,7 @@ export class ModifyUserComponent implements OnInit {
   randNumber: any;
   changeIcon?: boolean;
 
-  summonerData:any;
+  summonerData: any;
 
   user: any;
   puuid: any;
@@ -78,8 +78,8 @@ export class ModifyUserComponent implements OnInit {
       }
     });
 
-    if(this.user){
-      this._summonerService.obtenerInvocador(this.user.summonerAccount, this.region).subscribe(data=>{
+    if (this.user) {
+      this._summonerService.obtenerInvocador(this.user.summonerAccount, this.region).subscribe(data => {
         this.summonerData = data;
         this.accountImage1 = "./assets/12.7.1/img/profileicon/" + data.profileIconId + ".png";
       })
@@ -171,8 +171,13 @@ export class ModifyUserComponent implements OnInit {
       if (!data.msg || data != "ERROR") {
         this.toastr.success('Modified correctly', 'Modify Account');
         setTimeout(() => {
-          this._logoutService.logout();
-        }, 2000)
+          this._usuariosService.login(this.user.password, this.user.email).subscribe(data => {
+            if (!data.msg) {
+              localStorage.setItem('token', data.token);
+            }
+          });
+          this.router.navigate(['/']);
+        }, 2000);
       } else {
         this.toastr.error('Something went wrong!', 'Modify Account');
       }
@@ -213,15 +218,17 @@ export class ModifyUserComponent implements OnInit {
         this.user.summonerName = this.summonerName;
         this._usuariosService.modificarUser(this.user._id, this.user).subscribe(data => {
 
-          if(data.email)
-          {
+          if (data.email) {
             this.toastr.success('Account linked!', 'Link summoner account');
-            localStorage.removeItem('token');
             setTimeout(() => {
+              this._usuariosService.login(this.user.password, this.user.email).subscribe(data => {
+                if (!data.msg) {
+                  localStorage.setItem('token', data.token);
+                }
+              });
               this.router.navigate(['/']);
-              setTimeout(() => { window.location.reload() }, 5);
-            }, 2000)
-          }else{
+            }, 2000);
+          } else {
             this.toastr.error('Wrong profile icon', 'Link summoner account');
           }
         });
@@ -233,39 +240,42 @@ export class ModifyUserComponent implements OnInit {
 
   }
 
-  enableInputDiscord(){
-    let cb:any = document.getElementById('btncheck2');
-    let input:any = document.getElementById('InputDiscord');
-    let button:any = document.getElementById('ButtonDiscord');
+  enableInputDiscord() {
+    let cb: any = document.getElementById('btncheck2');
+    let input: any = document.getElementById('InputDiscord');
+    let button: any = document.getElementById('ButtonDiscord');
 
-    if(cb.checked){
-      input.disabled=false;
-      button.disabled=false;
-    }else{
-      input.disabled=true;
-      button.disabled=true;
+    if (cb.checked) {
+      input.disabled = false;
+      button.disabled = false;
+    } else {
+      input.disabled = true;
+      button.disabled = true;
     }
   }
 
-  addDiscord(){
-    let input:any = document.getElementById('InputDiscord');
+  addDiscord() {
+    let input: any = document.getElementById('InputDiscord');
     let expresion = /^[a-zA-Z0-9._-]{2,32}\#{1}[0-9]{4}$/i;
     let expresion2 = /^$/i;
-    if(input.value.match(expresion) || input.value.match(expresion2)){
-      this.user.discord=input.value;
-      this._usuariosService.modificarUser(this.user._id, this.user).subscribe(data=>{
-        if(data){
+    if (input.value.match(expresion) || input.value.match(expresion2)) {
+      this.user.discord = input.value;
+      this._usuariosService.modificarUser(this.user._id, this.user).subscribe(data => {
+        if (data) {
           this.toastr.success('Success', 'Discord');
-          localStorage.removeItem('token');
           setTimeout(() => {
+            this._usuariosService.login(this.user.password, this.user.email).subscribe(data => {
+              if (!data.msg) {
+                localStorage.setItem('token', data.token);
+              }
+            });
             this.router.navigate(['/']);
-            setTimeout(() => { window.location.reload() }, 5);
-          }, 2000)
-        }else{
-          this.toastr.error('Something went wrong', 'Discord');    
+          }, 2000);
+        } else {
+          this.toastr.error('Something went wrong', 'Discord');
         }
       })
-    }else{
+    } else {
       console.log(this.user);
       this.toastr.error('Wrong discord, please write it correctly', 'Discord');
     }
