@@ -77,26 +77,9 @@
                 *ngIf="modifyForm.get('InputEmail1')!.hasError('email') && modifyForm.get('InputEmail1')?.touched">
                 <span>Email <strong>is invalid</strong></span>
             </div>
-            <div><small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone
-                    else.</small></div>
-
-            <label for="InputEmail2" class="form-label mt-4">Repeat email address</label>
-            <input formControlName="InputEmail2" type="email" class="form-control" id="InputEmail2"
-                aria-describedby="emailHelp" placeholder="Repeat email">
-            <div class="text-danger"
-                *ngIf="modifyForm.get('InputEmail2')!.hasError('required') && modifyForm.get('InputEmail2')?.touched">
-                <span>Repeat email <strong>is required</strong></span>
-            </div>
-            <div class="text-danger"
-                *ngIf="modifyForm.get('InputEmail2')!.hasError('email') && modifyForm.get('InputEmail2')?.touched">
-                <span>Repeat email <strong>is invalid</strong></span>
-            </div>
-            <div class="text-danger" *ngIf="!validemail">
-                <span>Both emails <strong>need to match</strong></span>
-            </div>
 
             <br>
-            Change password?<input type="checkbox" id="swPw" (click)="swPw()">
+            Change password?<input style="margin-left:1%;" type="checkbox" id="swPw" (click)="swPw()">
             <br>
 
             <label for="InputPassword1" class="form-label mt-4">Password</label>

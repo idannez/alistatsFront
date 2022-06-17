@@ -19,7 +19,6 @@ export class ModifyUserComponent implements OnInit {
   linkSummoner?: boolean = false;
   modifyForm: UntypedFormGroup;
   validpw: boolean = true;
-  validemail: boolean = true;
   swpw?: boolean;
   region: string = "euw";
   summonerName: string = "";
@@ -50,7 +49,6 @@ export class ModifyUserComponent implements OnInit {
       InputUsername: ['', [Validators.required]],
       InputCompleteName: ['', [Validators.required]],
       InputEmail1: ['', [Validators.required, Validators.email]],
-      InputEmail2: ['', [Validators.required, Validators.email]],
       InputPassword1: ['', [Validators.required, Validators.minLength(8)]],
       InputPassword2: ['', [Validators.required, Validators.minLength(8)]],
     })
@@ -142,12 +140,6 @@ export class ModifyUserComponent implements OnInit {
       } else {
         this.validpw = true;
       }
-    }
-    if (this.modifyForm.get('InputEmail1')?.value != this.modifyForm.get('InputEmail2')?.value || this.modifyForm.get('InputEmail2')?.value == "") {
-      this.validemail = false;
-      valid = false;
-    } else {
-      this.validemail = true;
     }
 
     if (this.modifyForm.get('InputUsername')?.value == "" || this.modifyForm.get('InputCompleteName')?.value == "") {

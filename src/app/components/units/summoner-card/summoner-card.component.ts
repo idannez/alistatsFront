@@ -17,6 +17,7 @@ export class SummonerCardComponent implements OnInit {
   flexq: boolean = false;
   notexistant: boolean = false;
   posicion: number = 0;
+  region:any;
 
   user:any={};
 
@@ -26,6 +27,9 @@ export class SummonerCardComponent implements OnInit {
 
   ngOnInit(): void {
     this.summonerFind()
+    this.route.paramMap.subscribe((params: ParamMap) => {
+      this.region=params.get('region');
+    });
     setTimeout(() => { this.comprobacion = true }, 2000);
     
   }
