@@ -1,0 +1,223 @@
+<div class="d-flex" style="min-width: fit-content; max-width:100%" class="row">
+    <div class="card col-lg-3 mx-auto" style="width: 18rem;margin: 3%;font-size:0.9rem;height:fit-content" *ngIf="sdata">
+        <h3 class="card-header text-center">{{sdata.name}}</h3>
+        <h5 class="text-center" style="color:White" *ngIf="user.discord">{{user.discord}}</h5>
+        <svg class="d-block user-select-none" width="100%" focusable="false" role="img"
+            preserveAspectRatio="xMidYMid slice" viewBox="0 0 318 180"
+            style="font-size:1.125rem;text-anchor:middle;margin-top:5%">
+            <rect x="22%" width="56%" height="100%" fill="#868e96"></rect>
+            <image [attr.href]="sdata.profileIconId" width="100%" height="100%" />
+        </svg>
+        <div *ngFor="let rank of srankdata">
+            <div *ngIf="rank.queueType=='Solo Queue' || rank.queueType=='Flex Queue'">
+                <h4 class="text-center" style="margin-top:8%;">{{rank.queueType}}</h4>
+                <div class="d-flex mx-auto" style="margin-top:5%;margin-bottom:5%;width:100%;">
+                    <img class="d-inline user-select-none" style="margin-left:8%;" src="{{rank.tier}}" width="45%"
+                        height="100%" />
+                    <div class="my-auto card-body text-center d-inline">
+                        <p style="margin:0 auto;"
+                            *ngIf="rank.tierrank!='CHALLENGER' && rank.tierrank!='GRANDMASTER' && rank.tierrank!='MASTER'">
+                            {{rank.tierrank}} {{rank.rank}}</p>
+                        <p style="margin:0 auto;"
+                            *ngIf="rank.tierrank=='CHALLENGER' || rank.tierrank=='GRANDMASTER' || rank.tierrank=='MASTER'">
+                            {{rank.tierrank}}</p>
+                        <p style="margin:0 auto;">{{rank.leaguePoints}} LP</p>
+                        <p style="margin:0 auto;">{{rank.wins}}W {{rank.losses}}L</p>
+                        <p style="margin:0 auto;" *ngIf="rank.winrate<50"><span
+                                style="color:red;">{{rank.winrate}}%</span>
+                        </p>
+                        <p style="margin:0 auto;" *ngIf="rank.winrate>=50"><span
+                                style="color:green;">{{rank.winrate}}%</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="!soloq">
+            <h4 class="text-center" style="margin-top:8%;">Solo Queue</h4>
+            <div class="d-flex mx-auto" style="margin-top:5%;margin-bottom:5%;width:100%;">
+                <img class="d-inline user-select-none" style="margin-left:8%;"
+                    src="./assets/ranked-emblems/Emblem_UNRANKED.png" width="45%" />
+                <div class="my-auto card-body text-center d-inline">
+                    <p style="margin:0 auto;">Unranked</p>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="!flexq">
+            <h4 class="text-center" style="margin-top:8%;">Flex Queue</h4>
+            <div class="d-flex mx-auto" style="margin-top:5%;margin-bottom:5%;width:100%;">
+                <img class="d-inline user-select-none" style="margin-left:8%;"
+                    src="./assets/ranked-emblems/Emblem_UNRANKED.png" width="40%" />
+                <div class="my-auto card-body text-center d-inline">
+                    <p style="margin:0 auto;">Unranked</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="list-group text-center col-lg-9 mx-auto" style="margin-top:3%;" *ngIf="matches">
+
+        <div *ngFor="let matches of matches">
+
+            <div class="row align-items-start" style="min-width:fit-content" *ngIf="!matches.status && !matches.info.gameMode.includes('TUTORIAL')"
+                [ngStyle]='matches.info.participants[matches.info.posicion].win==true?{"background-color":"rgb(122, 182, 252)","color":"black","padding":"0.5em","margin-bottom":"1%","border":"0.2em solid rgb(0, 119, 255)"}:{"background-color":"rgb(231, 142, 142)","color":"black","padding":"0.5em","margin-bottom": "1%","border":"0.2em solid rgb(112, 0, 0)"}'>
+
+                <div class="col-lg-3">
+                    <h5 class="d-block">{{matches.info.gameType}}</h5>
+                    <h6 class="d-block">{{matches.info.howOldGameIs}}</h6>
+                    <div class="d-flex">
+                        <img class="d-inline mx-auto" src="{{matches.info.rutaChampion}}" alt="a"
+                            style="border-radius: 100%;width:5em;">
+                        <div class="d-inline">
+                            <img class="d-block mx-auto" src="{{matches.info.rutaSummoner1}}" alt="a"
+                                style="border-radius: 100%;width:2em;height:2em;margin-top:0.25em;">
+                            <img class="d-block mx-auto" src="{{matches.info.rutaSummoner2}}" alt="a"
+                                style="border-radius: 100%;width:2em;height:2em;margin-top:0.25em;">
+                        </div>
+                        <div class="d-inline" style="margin-left:0.2em">
+                            <img class="d-block mx-auto" src="{{matches.info.primaryRune}}" alt="a"
+                                style="border-radius: 100%;width:2em;height:2em;margin-top:0.25em;background-color:rgb(0, 0, 0);">
+                            <img class="d-block mx-auto" src="{{matches.info.secondaryRune}}" alt="a"
+                                style="border-radius: 100%;width:2em;height:2em;margin-top:0.25em;background-color:rgb(0, 0, 0);">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-2 my-auto">
+                    <h6 class="d-block"><span>{{matches.info.participants[matches.info.posicion].kills}}</span> /
+                        <span>{{matches.info.participants[matches.info.posicion].deaths}}</span> /
+                        <span>{{matches.info.participants[matches.info.posicion].assists}}</span>
+                    </h6>
+                    <h6 *ngIf="matches.info.participants[matches.info.posicion].challenges" class="mx-auto"
+                        style="padding:0.3em;background-color: rgba(0, 0, 0, 0.3);width: fit-content;text-align: center;">
+                        <span
+                            [ngStyle]='matches.info.participants[matches.info.posicion].challenges.kda>=3?{"color":"rgb(0, 255, 42)"}:{"color":"rgb(255, 0, 0)"}'>
+                            {{matches.info.participants[matches.info.posicion].challenges.kda.toFixed(2)}}
+                            KDA
+                        </span>
+                    </h6>
+                </div>
+
+                <div class="col-lg-1 my-auto">
+                    <h6 class="d-block">Level {{matches.info.participants[matches.info.posicion].champLevel}}</h6>
+                    <h6 class="d-block">
+                        {{matches.info.participants[matches.info.posicion].neutralMinionsKilled+matches.info.participants[matches.info.posicion].totalMinionsKilled}}
+                        CS</h6>
+                    <h6 class="d-block">{{matches.info.totalMinutes}} Min</h6>
+                </div>
+
+                <div class="col-lg-2 my-auto">
+                    <div class="d-block">
+                        <img class="d-inline border" src="{{matches.info.item0}}"
+                            style="width:2em;height:2em;margin:0.1em;background-color: rgb(0, 0, 0, 0.3);">
+                        <img class="d-inline border" src="{{matches.info.item1}}" alt="a"
+                            style="width:2em;height:2em;margin:0.1em;background-color: rgb(0, 0, 0, 0.3);">
+                        <img class="d-inline border" src="{{matches.info.item2}}" alt="a"
+                            style="width:2em;height:2em;margin:0.1em;background-color: rgb(0, 0, 0, 0.3);">
+                        <img class="d-inline" src="{{matches.info.item6}}" alt="a"
+                            style="border-radius: 50%;width:2em;height:2em;margin-left:0.1em;background-color: rgb(0, 0, 0, 0.3);">
+                    </div>
+                    <div class="d-block">
+                        <img class="d-inline border" src="{{matches.info.item3}}" alt="a"
+                            style="width:2em;height:2em;margin:0.1em;background-color: rgb(0, 0, 0, 0.3);">
+                        <img class="d-inline border" src="{{matches.info.item4}}" alt="a"
+                            style="width:2em;height:2em;margin:0.1em;background-color: rgb(0, 0, 0, 0.3);">
+                        <img class="d-inline border" src="{{matches.info.item5}}" alt="a"
+                            style="width:2em;height:2em;margin:0.1em;background-color: rgb(0, 0, 0, 0.3);">
+                        <img *ngIf="matches.info.participants[matches.info.posicion].win==true" class="d-inline"
+                            src="./assets/12.7.1/img/item/bluebuild.png" alt="a"
+                            style="border-radius: 50%;width:2em;height:2em;margin-left:0.25em;">
+                        <img *ngIf="matches.info.participants[matches.info.posicion].win==false" class="d-inline"
+                            src="./assets/12.7.1/img/item/redbuild.png" alt="a"
+                            style="border-radius: 50%;width:2em;height:2em;margin-left:0.25em;">
+                    </div>
+                </div>
+                    <div class="col-2 d-grid" style="text-align:left;white-space:nowrap;">
+                        <div class="float-start" style="max-height: 30px;overflow:hidden">
+                            <img class="float-start" src="{{matches.info.participants[0].rutaChampion}}" alt="a"
+                                style="border-radius: 50%;width:1.5em;height:1.5em;margin:0.25em;"><span
+                                data-toggle="tooltip" data-placement="top"
+                                title="{{matches.info.participants[0].summonerName}}">{{matches.info.participants[0].summonerName}}</span>
+                        </div>
+                        <div style="max-height: 30px;">
+                            <img class="float-start" src="{{matches.info.participants[1].rutaChampion}}" alt="a"
+                                style="border-radius: 50%;width:1.5em;height:1.5em;margin:0.25em;"><span
+                                data-toggle="tooltip" data-placement="top"
+                                title="{{matches.info.participants[1].summonerName}}">{{matches.info.participants[1].summonerName}}</span>
+                        </div>
+
+                        <div class="float-start" style="max-height: 30px;">
+                            <img class="float-start" src="{{matches.info.participants[2].rutaChampion}}" alt="a"
+                                style="border-radius: 50%;width:1.5em;height:1.5em;margin:0.25em;"><span
+                                data-toggle="tooltip" data-placement="top"
+                                title="{{matches.info.participants[2].summonerName}}">{{matches.info.participants[2].summonerName}}</span>
+                        </div>
+                        <div class="float-start" style="max-height: 30px;">
+                            <img class="float-start" src="{{matches.info.participants[3].rutaChampion}}" alt="a"
+                                style="border-radius: 50%;width:1.5em;height:1.5em;margin:0.25em;"><span
+                                data-toggle="tooltip" data-placement="top"
+                                title="{{matches.info.participants[3].summonerName}}">{{matches.info.participants[3].summonerName}}</span>
+                        </div>
+                        <div class="float-start" style="max-height: 30px;">
+                            <img class="float-start" src="{{matches.info.participants[4].rutaChampion}}" alt="a"
+                                style="border-radius: 50%;width:1.5em;height:1.5em;margin:0.25em;"><span
+                                data-toggle="tooltip" data-placement="top"
+                                title="{{matches.info.participants[4].summonerName}}">{{matches.info.participants[4].summonerName}}</span>
+                        </div>
+                    </div>
+
+                    <div class="col-2 mx-auto d-grid" style="text-align:left;white-space:nowrap;">
+                        <div class="float-start" style="max-height: 30px;">
+                            <img class="float-start" src="{{matches.info.participants[5].rutaChampion}}" alt="a"
+                                style="border-radius: 50%;width:1.5em;height:1.5em;margin:0.25em;"><span
+                                data-toggle="tooltip" data-placement="top"
+                                title="{{matches.info.participants[5].summonerName}}">{{matches.info.participants[5].summonerName}}</span>
+                        </div>
+                        <div class="float-start" style="max-height: 30px;">
+                            <img class="float-start" src="{{matches.info.participants[6].rutaChampion}}" alt="a"
+                                style="border-radius: 50%;width:1.5em;height:1.5em;margin:0.25em;"><span
+                                data-toggle="tooltip" data-placement="top"
+                                title="{{matches.info.participants[6].summonerName}}">{{matches.info.participants[6].summonerName}}</span>
+                        </div>
+                        <div class="float-start" style="max-height: 30px;">
+                            <img class="float-start" src="{{matches.info.participants[7].rutaChampion}}" alt="a"
+                                style="border-radius: 50%;width:1.5em;height:1.5em;margin:0.25em;"><span
+                                data-toggle="tooltip" data-placement="top"
+                                title="{{matches.info.participants[7].summonerName}}">{{matches.info.participants[7].summonerName}}</span>
+                        </div>
+                        <div class="float-start" style="max-height: 30px;">
+                            <img class="float-start" src="{{matches.info.participants[8].rutaChampion}}" alt="a"
+                                style="border-radius: 50%;width:1.5em;height:1.5em;margin:0.25em;"><span
+                                data-toggle="tooltip" data-placement="top"
+                                title="{{matches.info.participants[8].summonerName}}">{{matches.info.participants[8].summonerName}}</span>
+                        </div>
+                        <div class="float-start" style="max-height: 30px;">
+                            <img class="float-start" src="{{matches.info.participants[9].rutaChampion}}" alt="a"
+                                style="border-radius: 50%;width:1.5em;height:1.5em;margin:0.25em;"><span
+                                data-toggle="tooltip" data-placement="top"
+                                title="{{matches.info.participants[9].summonerName}}">{{matches.info.participants[9].summonerName}}</span>
+                        </div>
+                    </div>
+
+
+            </div>
+        </div>
+    </div>
+
+    <div class="card text-white bg-danger mb-3 mx-auto text-center d-inline" style="max-width: 40rem;margin-top:7rem"
+        *ngIf="!sdata && comprobacion==true">
+        <div class="card-body">
+            <h4 class="card-title">Summoner</h4>
+            <p class="card-text">Summoner not found.</p>
+        </div>
+    </div>
+
+    <div class="card text-white bg-warning mb-3 mx-auto text-center d-inline"
+        style="max-width: 40rem;margin-top:7rem;height:fit-content" *ngIf="!matches && comprobacion==true">
+        <div class="card-body">
+            <h4 class="card-title">Matches</h4>
+            <p class="card-text">No matches found for this summoner. Please, wait a few seconds, update the page or
+                contact with us.</p>
+        </div>
+    </div>
+
+</div>

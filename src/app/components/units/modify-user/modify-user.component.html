@@ -1,0 +1,170 @@
+<table class="table table-hover mx-auto" *ngIf="!modifyUser && !linkSummoner" style="max-width:75%;margin:3%;">
+    <thead>
+        <tr>
+            <th scope="col">Username</th>
+            <th scope="col">Complete Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Summoner account</th>
+            <th scope="col">Discord</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr class="table-primary" *ngIf="user">
+            <td>{{user.nombreUsuario}}</td>
+            <td>{{user.nombreCompleto}}</td>
+            <td>{{user.email}}</td>
+            <td *ngIf="user.summonerAccount">{{user.summonerName}}</td>
+            <td *ngIf="!user.summonerAccount">Not Linked</td>
+            <td *ngIf="!user.discord">Not linked</td>
+            <td *ngIf="user.discord">{{user.discord}}</td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="mx-auto text-center">
+    <button class="btn btn-primary" style="margin:2%;" type="submit" (click)="ma()"
+        *ngIf="!modifyUser && !linkSummoner">Modify account</button>
+
+    <button class="btn btn-primary" style="margin:2%;" type="submit" (click)="ls()"
+        *ngIf="!modifyUser && !linkSummoner && !isAccountLinked">Link summoner account</button>
+</div>
+
+<div class="mx-auto text-center" *ngIf="!modifyUser && !linkSummoner && isAccountLinked">
+
+    <label for="btncheck2">Would you like to show your discord to anyone who searchs for your summoner account?</label>
+    <input style="margin-left: 1%;" type="checkbox" id="btncheck2" (click)="enableInputDiscord()"><br>
+    <small class="form-text text-muted">If you want to remove your discord, just leave it empty and press the button</small><br>
+    <input type="text" style="width: 40%;" class="form-control mx-auto" id="InputDiscord" placeholder="discord#3185" disabled>
+    <button class="btn btn-primary" style="margin:2%;" type="button" id="ButtonDiscord" (click)="addDiscord()" disabled>
+        Add discord
+    </button>
+
+</div>
+
+<form [formGroup]="modifyForm" (ngSubmit)="modify()" class="mx-auto" style="width:75%;margin-top:3%;"
+    *ngIf="modifyUser">
+
+    <fieldset>
+
+        <legend class="text-center">Modify account</legend>
+
+        <div class="form-group">
+
+            <label for="InputCompleteName" class="form-label mt-4">Complete name</label>
+            <input formControlName="InputCompleteName" type="text" class="form-control" id="InputCompleteName"
+                placeholder="Brandon Sanderson">
+            <div class="text-danger"
+                *ngIf="modifyForm.get('InputCompleteName')!.hasError('required') && modifyForm.get('InputCompleteName')?.touched">
+                <span>Complete name <strong>is required</strong></span>
+            </div>
+
+            <label for="InputUsername" class="form-label mt-4">Username</label>
+            <input formControlName="InputUsername" type="text" class="form-control" id="InputUsername"
+                placeholder="bsand25">
+            <div class="text-danger"
+                *ngIf="modifyForm.get('InputUsername')!.hasError('required') && modifyForm.get('InputUsername')?.touched">
+                <span>Username <strong>is required</strong></span>
+            </div>
+
+            <label for="InputEmail1" class="form-label mt-4">Email address</label>
+            <input formControlName="InputEmail1" type="email" class="form-control" id="InputEmail1"
+                aria-describedby="emailHelp" placeholder="Enter email">
+            <div class="text-danger"
+                *ngIf="modifyForm.get('InputEmail1')!.hasError('required') && modifyForm.get('InputEmail1')?.touched">
+                <span>Email <strong>is required</strong></span>
+            </div>
+            <div class="text-danger"
+                *ngIf="modifyForm.get('InputEmail1')!.hasError('email') && modifyForm.get('InputEmail1')?.touched">
+                <span>Email <strong>is invalid</strong></span>
+            </div>
+            <div><small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone
+                    else.</small></div>
+
+            <label for="InputEmail2" class="form-label mt-4">Repeat email address</label>
+            <input formControlName="InputEmail2" type="email" class="form-control" id="InputEmail2"
+                aria-describedby="emailHelp" placeholder="Repeat email">
+            <div class="text-danger"
+                *ngIf="modifyForm.get('InputEmail2')!.hasError('required') && modifyForm.get('InputEmail2')?.touched">
+                <span>Repeat email <strong>is required</strong></span>
+            </div>
+            <div class="text-danger"
+                *ngIf="modifyForm.get('InputEmail2')!.hasError('email') && modifyForm.get('InputEmail2')?.touched">
+                <span>Repeat email <strong>is invalid</strong></span>
+            </div>
+            <div class="text-danger" *ngIf="!validemail">
+                <span>Both emails <strong>need to match</strong></span>
+            </div>
+
+            <br>
+            Change password?<input type="checkbox" id="swPw" (click)="swPw()">
+            <br>
+
+            <label for="InputPassword1" class="form-label mt-4">Password</label>
+            <input formControlName="InputPassword1" type="password" class="form-control" id="InputPassword1"
+                placeholder="Password" [disabled]="true">
+            <div class="text-danger"
+                *ngIf="modifyForm.get('InputPassword1')?.hasError('required') && modifyForm.get('InputPassword1')?.touched && swpw">
+                <span>Password <strong>is required</strong></span>
+            </div>
+            <div class="text-danger"
+                *ngIf="modifyForm.get('InputPassword1')?.hasError('minlength') && modifyForm.get('InputPassword1')?.touched && swpw">
+                <span>Password <strong>minimum length is 8</strong></span>
+            </div>
+
+            <label for="InputPassword2" class="form-label mt-4">Repeat password</label>
+            <input formControlName="InputPassword2" type="password" class="form-control" id="InputPassword2"
+                placeholder="Password">
+            <div class="text-danger"
+                *ngIf="modifyForm.get('InputPassword2')?.hasError('required') && modifyForm.get('InputPassword2')?.touched && swpw">
+                <span>Repeat password <strong>is required</strong></span>
+            </div>
+            <div class="text-danger"
+                *ngIf="modifyForm.get('InputPassword2')?.hasError('minlength') && modifyForm.get('InputPassword2')?.touched && swpw">
+                <span>Repeat password <strong>minimum length is 8</strong></span>
+            </div>
+            <div class="text-danger" *ngIf="!validpw && swpw">
+                <span>Both passwords <strong>need to match</strong></span>
+            </div>
+        </div>
+        <br>
+        <button class="btn btn-primary" style="margin:3px" type="submit">Modify Account</button>
+        <button class="btn btn-primary" style="margin:3px" type="button" (click)="ma()">Cancel</button>
+
+    </fieldset>
+
+</form>
+
+<div *ngIf="linkSummoner" class="text-center">
+    <h4 style="color:white;margin-top:3%;">Type your summoner name</h4>
+    <div class="input-group mx-auto" style="max-width:25%;margin-top:3%;">
+        <select class="form-select text-left"
+            style="max-width:10%;min-width:fit-content;background-color: #375a7f;color:white;" [(ngModel)]="region">
+            <option value="euw">EUW</option>
+            <option value="eun">EUN</option>
+            <option value="br">BR</option>
+            <option value="jp">JP</option>
+            <option value="kr">KR</option>
+            <option value="las">LAS</option>
+            <option value="lan">LAN</option>
+            <option value="oc">OCE</option>
+            <option value="tr">TR</option>
+            <option value="ru">RU</option>
+            <option value="na">NA</option>
+        </select>
+        <input type="text" class="form-control" placeholder="Summoners name..." aria-label="Summoners name..."
+            aria-describedby="go" [(ngModel)]="summonerName" id="search" (keyup.enter)="searchSummoner()">
+        <button class="btn btn-primary" type="button" id="go" (click)="searchSummoner()">Link</button>
+    </div>
+    <button class="btn btn-primary" style="margin:1%" type="button" (click)="ls()">Cancel</button>
+</div>
+
+<div *ngIf="changeIcon" class="mx-auto text-center">
+
+    <h4 style="color:white;">Current profile icon: </h4><img src="{{accountImage1}}" alt="" style="max-width:80px;" id="accountImg"><br>
+    <h4 style="color:white;">Press the button when you changed your profile icon to: </h4><img src="{{accountImage2}}" alt="" style="max-width:80px;" id="accountImg">
+    <br>
+
+    <button style="margin:1%" class="btn btn-primary" type="button" (click)="comprobarProfileIcon()">Done!</button>
+
+
+</div>

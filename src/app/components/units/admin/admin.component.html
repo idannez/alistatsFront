@@ -1,0 +1,39 @@
+<div class="input-group mx-auto" style="max-width:50%;margin-top:3%;">
+    <select class="form-select text-left" style="max-width:10%;min-width:fit-content;background-color: #375a7f;color:white;" [(ngModel)]="searchBy">
+        <option value="email">Email</option>
+        <option value="sname">Summoner name</option>
+        <option value="uname">User name</option>
+    </select>
+    <input type="text" class="form-control" aria-label="sdata"
+        aria-describedby="go" [(ngModel)]="sdata" id="search" (keyup.enter)="search()">
+    <button class="btn btn-primary" type="button" id="go" (click)="search()">Search</button>
+</div>
+
+<table class="table table-hover mx-auto" *ngIf="user" style="max-width:75%;margin:3%;">
+    <thead>
+        <tr>
+            <th scope="col">Username</th>
+            <th scope="col">Complete Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Summoner account</th>
+            <th scope="col">Rol</th>
+            <th scope="col">Delete</th>
+            <th scope="col">Unlink Summoner Account</th>
+            <th scope="col">Change Rol</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr class="table-primary" *ngFor="let user of user">
+            <td>{{user.nombreUsuario}}</td>
+            <td>{{user.nombreCompleto}}</td>
+            <td>{{user.email}}</td>
+            <td *ngIf="user.summonerAccount">{{user.summonerName}}</td>
+            <td *ngIf="!user.summonerAccount">Not Linked</td>
+            <td *ngIf="user.rol">{{user.rol}}</td>
+            <td *ngIf="!user.rol">normal</td>
+            <td><span (click)="delete(user._id)">Delete</span></td>
+            <td><span (click)="unlink(user._id)">Unlink</span></td>
+            <td><span (click)="changeRol(user._id)">Change rol</span></td>
+        </tr>
+    </tbody>
+</table>
