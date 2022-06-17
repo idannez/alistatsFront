@@ -32,11 +32,11 @@ export class AdminComponent implements OnInit {
   }
 
   search(){
-    this.user=null;
+    this.user=[];
     if(this.searchBy=="email"){
       this._usuarioService.buscarUserPorEmail(this.sdata).subscribe(data=>{
         if(data){
-          this.user=data;
+          this.user.push(data);
         }else{
           this.user=null;
         }
@@ -45,7 +45,7 @@ export class AdminComponent implements OnInit {
     if(this.searchBy=="sname"){
       this._usuarioService.buscarUserPorSummonerName(this.sdata).subscribe(data=>{
         if(data){
-          this.user=data;
+          this.user.push(data);
         }else{
           this.user=null;
         }
@@ -55,7 +55,6 @@ export class AdminComponent implements OnInit {
       this._usuarioService.buscarUserPorUserName(this.sdata).subscribe(data=>{
         if(data){
           this.user=data;
-          console.log(this.user);
         }else{
           this.user=null;
         }
