@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class UsuariosService {
-  url = 'http://15.236.108.147:3000/';
+  url = 'https://alistats.click:3000/';
 
   constructor(private http:HttpClient) { }
 
